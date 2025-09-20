@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Recommendation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .info-text {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .api-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .api-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .api-info p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌱 Crop Recommendation System</h1>
+            <p>Get AI-powered crop recommendations based on soil and weather conditions</p>
+        </div>
+        
+        <div class="info-text">
+            <strong>Instructions:</strong> Enter the soil and weather parameters below to get a crop recommendation. The system uses machine learning to suggest the best crop for your conditions.
+        </div>
+        
+        <form action="/predict_form" method="POST">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="N">Nitrogen (N) - ppm</label>
+                    <input type="number" id="N" name="N" step="0.1" min="0" max="200" required 
+                           placeholder="e.g., 50">
+                </div>
+                <div class="form-group">
+                    <label for="P">Phosphorus (P) - ppm</label>
+                    <input type="number" id="P" name="P" step="0.1" min="0" max="200" required 
+                           placeholder="e.g., 30">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="K">Potassium (K) - ppm</label>
+                    <input type="number" id="K" name="K" step="0.1" min="0" max="300" required 
+                           placeholder="e.g., 40">
+                </div>
+                <div class="form-group">
+                    <label for="temperature">Temperature (°C)</label>
+                    <input type="number" id="temperature" name="temperature" step="0.1" min="-10" max="50" required 
+                           placeholder="e.g., 25.5">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="humidity">Humidity (%)</label>
+                    <input type="number" id="humidity" name="humidity" step="0.1" min="0" max="100" required 
+                           placeholder="e.g., 65.2">
+                </div>
+                <div class="form-group">
+                    <label for="ph">pH Level</label>
+                    <input type="number" id="ph" name="ph" step="0.1" min="0" max="14" required 
+                           placeholder="e.g., 6.5">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="rainfall">Rainfall (mm)</label>
+                <input type="number" id="rainfall" name="rainfall" step="0.1" min="0" max="500" required 
+                       placeholder="e.g., 120.5">
+            </div>
+            
+            <button type="submit" class="submit-btn">Get Crop Recommendation</button>
+        </form>
+        
+        <div class="api-info">
+            <h3>API Usage</h3>
+            <p>You can also use this service programmatically via REST API:</p>
+            <div class="code">
+POST /predict
+Content-Type: application/json
+
+{
+    "N": 50,
+    "P": 30,
+    "K": 40,
+    "temperature": 25.5,
+    "humidity": 65.2,
+    "ph": 6.5,
+    "rainfall": 120.5
+}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

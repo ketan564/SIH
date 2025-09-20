@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Recommendation Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .result-header {
+            margin-bottom: 30px;
+        }
+        
+        .result-header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .result-header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .prediction-card {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .prediction-card h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .prediction-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .confidence {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+        
+        .input-summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .input-summary h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .input-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .input-item strong {
+            color: #333;
+        }
+        
+        .input-item span {
+            color: #666;
+        }
+        
+        .action-buttons {
+            margin-top: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 0 10px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .crop-emoji {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result-header">
+            <h1>🌱 Crop Recommendation Result</h1>
+            <p>Based on your soil and weather conditions</p>
+        </div>
+        
+        <div class="prediction-card">
+            <div class="crop-emoji">🌾</div>
+            <h2>{{ predicted_crop.title() }}</h2>
+            <h3>Recommended Crop</h3>
+            {% if confidence %}
+            <div class="confidence">
+                Confidence: {{ "%.1f"|format(confidence) }}%
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="input-summary">
+            <h3>Your Input Parameters</h3>
+            <div class="input-grid">
+                <div class="input-item">
+                    <strong>Nitrogen (N):</strong><br>
+                    <span>{{ input_data.N }} ppm</span>
+                </div>
+                <div class="input-item">
+                    <strong>Phosphorus (P):</strong><br>
+                    <span>{{ input_data.P }} ppm</span>
+                </div>
+                <div class="input-item">
+                    <strong>Potassium (K):</strong><br>
+                    <span>{{ input_data.K }} ppm</span>
+                </div>
+                <div class="input-item">
+                    <strong>Temperature:</strong><br>
+                    <span>{{ input_data.temperature }}°C</span>
+                </div>
+                <div class="input-item">
+                    <strong>Humidity:</strong><br>
+                    <span>{{ input_data.humidity }}%</span>
+                </div>
+                <div class="input-item">
+                    <strong>pH Level:</strong><br>
+                    <span>{{ input_data.ph }}</span>
+                </div>
+                <div class="input-item">
+                    <strong>Rainfall:</strong><br>
+                    <span>{{ input_data.rainfall }} mm</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="/" class="btn btn-primary">Try Another Prediction</a>
+            <a href="/model_info" class="btn btn-secondary">Model Information</a>
+        </div>
+    </div>
+</body>
+</html>
